@@ -1,0 +1,6 @@
+# Ignore generated data and outputs
+splits/
+pilot_results/
+__pycache__/
+*.pyc
+.DS_Store
