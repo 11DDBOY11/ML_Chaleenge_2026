@@ -195,4 +195,4 @@ The system generates two official Tab-Separated Value (`.tsv`) deliverables:
 
 ---
 
-*Developed for the **Amazon Machine Learning Challenge 2026** by Darshan Sakale & Karthik T S.*
+*Developed for the **Amazon Machine Learning Challenge 2026** by Me, Darshan Sakale & Karthik T S.*
