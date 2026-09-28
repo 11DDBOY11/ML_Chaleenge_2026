@@ -136,6 +136,11 @@ ml_challenge/
 ├── 06b_audit_strategies.py         # Phase 2: Strategy contribution breakdown auditor
 ├── 07_feature_extractor.py         # Phase 3: 15-feature pairwise similarity extractor
 ├── 08_train_matcher.py             # Phase 3: LightGBM pairwise matcher & threshold tuner
+├── 09_test_inference.py           # Phase 4: Production SQLite WAL-mode test inference pipeline
+├── 09a_profile_sample.py          # Phase 4: 1,000 S1 smoke test & profiler harness
+├── 09b_test_inference_fast.py     # Phase 4: Multi-core in-memory parallel inference engine
+├── 09c_fast_profiler.py           # Phase 4: Microsecond empirical stage breakdown profiler
+├── create_fallback.py             # Phase 4: Validated fallback generator for 1.73M test records
 ├── README.md                       # Repository documentation
 └── .gitignore                      # Git exclusion rules (ignores generated TSVs & split data)
 ```
@@ -174,6 +179,29 @@ Extract pairwise similarity features, train the LightGBM classifier on training 
 ```bash
 python ml_challenge/08_train_matcher.py
 ```
+
+### Step 5: Run Production Test Inference & Output Validation
+Run full inference over 1.73M test entities, update resumable checkpoints, or create verified fallback deliverables:
+```bash
+# Run production WAL-mode SQLite test inference
+python ml_challenge/09_test_inference.py
+
+# Create complete 1.73M record fallback deliverable
+python ml_challenge/create_fallback.py
+```
+
+---
+
+## ⚡ Empirical Profiling & Optimization Benchmarks (1,000 S1 Sample)
+
+| Pipeline Stage | Measured Time | % of Runtime | Bottleneck Diagnosis & Optimization Strategy |
+| :--- | :---: | :---: | :--- |
+| **1. Candidate Generation** | 27.84s | 21.5% | Multi-strategy inverted index lookup across 10.3M entities |
+| **2. SQLite Disk Reads** | 43.46s | **33.5%** | **Primary I/O Bottleneck**: SQL queries for candidate text attributes |
+| **3. Feature Calculation** | 41.00s | **31.6%** | **Primary CPU Bottleneck**: Pairwise Levenshtein, Jaccard & fuzzy metrics |
+| **4. Representation Prep** | 16.82s | 13.0% | Regex normalization and trigram set extraction |
+| **5. Model Prediction** | 0.58s | **0.4%** | LightGBM matrix inference (<0.4% of runtime; GPU not required) |
+| **6. File Writing** | 0.06s | 0.0% | Streaming TSV append |
 
 ---
 
