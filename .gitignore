@@ -1,6 +1,15 @@
 # Ignore generated data and outputs
 splits/
 pilot_results/
+output/
+fallback_output/
+fast_output/
+prof_sample/
+*.db
+*.db-wal
+*.db-shm
+*.tsv
 __pycache__/
 *.pyc
 .DS_Store
+
